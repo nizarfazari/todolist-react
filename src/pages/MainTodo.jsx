@@ -1,50 +1,61 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Form, InputGroup } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import { MdEdit, MdDelete } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { Buttons } from "../components";
-
-const getLocalItems = () => {
-  let arr = localStorage.getItem("list");
-  if (arr) {
-    return JSON.parse(arr);
-  } else {
-    return [];
-  }
-};
+import { API_URL } from "../utils/constant";
 
 const MainTodo = () => {
-  // const [complete, setComplete] = useState(null);
-  const [data, setData] = useState(getLocalItems());
+  const [data, setData] = useState([]);
+  const [tempdata, setTempData] = useState([]);
   const [input, setInput] = useState("");
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   let arr = localStorage.getItem("list");
-  //   if (arr) {
-  //     let datas = JSON.parse(arr);
-  //     setData(datas);
-  //   }
-  // }, []);
+  useEffect(() => {
+    getData();
+  }, []);
 
-  const checkdata = (bool) => {
-    const dones = data.filter((todo) => todo.complete === bool);
-    console.log(dones);
+  const getData = async () => {
+    try {
+      const datas = await axios.get(`${API_URL}`);
+      setData(datas.data);
+      setTempData(datas.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleChange = (e) => {
+  const checkdata = (bool) => {
+    const dones = tempdata.filter((todo) => todo.complete === bool);
+    setData(dones);
+  };
+
+  const filterSearch = async (e) => {
     setInput(e.target.value);
+    const a = tempdata.filter((e) => {
+      if (input === "") {
+        return e;
+      } else if (e.task.toLowerCase().includes(input.toLowerCase())) {
+        return e;
+      }
+    });
   };
 
   const removeTodo = (id) => {
-    const removeArr = data.filter((todo) => todo.id !== id);
-
-    setData(removeArr);
+    axios.delete(`${API_URL}/${id}`).then((res) => {
+      getData();
+    });
   };
 
   const removeAll = (a) => {
-    setData([]);
+    if (a === true) {
+      const hasil = data.filter((a) => a.complete === false);
+      setData(hasil);
+    } else {
+      setData([]);
+    }
   };
 
   const completeTodo = (id) => {
@@ -64,11 +75,11 @@ const MainTodo = () => {
       <h1 className="text-3xl font-bold my-3">TodoSeacrh</h1>
       <div className="container border-solid grid border-solid border-2 p-4" style={{ gridTemplateColumns: "60% 40%" }}>
         <div className="column-left">
-          <InputGroup className="mb-3" onChange={(e) => handleChange(e)}>
+          <InputGroup className="mb-3" onChange={(e) => filterSearch(e)}>
             <InputGroup.Text id="inputGroup-sizing-default" style={{ backgroundColor: "#16A3B5" }}>
               <FaSearch className="text-xl fill-white" />
             </InputGroup.Text>
-            <Form.Control aria-label="Default" aria-describedby="inputGroup-sizing-default" />
+            <Form.Control aria-label="Default" aria-describedby="inputGroup-sizing-default" value={input} />
           </InputGroup>
           <div className="d-grid">
             <Buttons nama="Search" backgroundColor="#16A3B5" />
@@ -83,7 +94,7 @@ const MainTodo = () => {
       <div className="container px-0">
         <h2 className="my-3">TodoList</h2>
         <div className=" flex  gap-x-10 justify-between mb-5">
-          <Buttons nama="All" backgroundColor="#16A3B5" width="400px" />
+          <Buttons nama="All" backgroundColor="#16A3B5" width="400px" onClick={() => setData(tempdata)} />
           <Buttons nama="Done" backgroundColor="#16A3B5" width="400px" onClick={() => checkdata(true)} />
           <Buttons nama="Todo" backgroundColor="#16A3B5" width="400px" onClick={() => checkdata(false)} />
         </div>
@@ -91,10 +102,10 @@ const MainTodo = () => {
         {data
           ? data.map((i) => {
               return (
-                <div className={`labels border-2 flex justify-between p-3 my-4 ${i.complete ? "complete" : ""} `}>
-                  <div className="text">{i.text}</div>
+                <div className={`labels border-2 flex justify-between p-3 my-4 ${i.complete ? "complete" : ""} `} key={i.id}>
+                  <div className="text">{i.task}</div>
                   <div className="icons flex">
-                    <input type="checkbox" className="icon" onClick={() => completeTodo(i.id)} />
+                    {i.complete ? <input type="checkbox" checked className="icon" onClick={(e) => completeTodo(i.id)} /> : <input type="checkbox" className="icon" onClick={(e) => completeTodo(i.id)} />}
                     <MdEdit className="icon edit" />
                     <MdDelete className="icon delete" onClick={() => removeTodo(i.id)} />
                   </div>
@@ -104,8 +115,8 @@ const MainTodo = () => {
           : "Data Koosng"}
 
         <div className="buttons flex justify-between  gap-x-5">
-          <Buttons nama="Delete done task" backgroundColor="#D93649" width="600px" />
-          <Buttons nama="Delete all task" backgroundColor="#D93649" width="600px" type="submit" onClick={() => removeAll("asdas")} />
+          <Buttons nama="Delete done task" backgroundColor="#D93649" width="600px" onClick={() => removeAll(true)} />
+          <Buttons nama="Delete all task" backgroundColor="#D93649" width="600px" type="submit" onClick={() => removeAll()} />
         </div>
       </div>
     </div>

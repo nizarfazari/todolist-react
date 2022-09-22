@@ -34,3 +34,8 @@ code {
 .icon.delete {
   color: #df2f4b;
 }
+
+.icon.checkbox {
+  width: 20px;
+  height: 20px;
+}

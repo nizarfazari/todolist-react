@@ -2,26 +2,28 @@ import React, { useEffect, useState } from "react";
 import { Buttons } from "../components";
 import { Form, InputGroup } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
+import { useLocation, useNavigate } from "react-router-dom";
+import { API_URL } from "../utils/constant";
+import axios from "axios";
 
 const AddTodo = (props) => {
-  const [data, setData] = useState([]);
   const [inputData, setInputData] = useState("");
-
-  useEffect(() => {
-    localStorage.setItem("list", JSON.stringify(data));
-  }, [data]);
+  const navigate = useNavigate();
 
   const addTodo = (e) => {
     e.preventDefault();
 
     if (!inputData) {
+      alert("belum measukan data");
     } else {
       const datas = {
         id: Math.floor(Math.random() * 10000),
-        text: inputData,
+        task: inputData,
         complete: false,
       };
-      setData([...data, datas]);
+      axios.post(API_URL, datas).then((res) => {
+        navigate("/");
+      });
       setInputData("");
     }
   };
