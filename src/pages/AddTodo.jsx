@@ -41,7 +41,7 @@ const AddTodo = (props) => {
         task: inputData,
       };
       axios
-        .put(`${API_URL}/${id}`, datas)
+        .patch(`${API_URL}/${id}`, datas)
         .then((res) => {
           navigate("/");
         })
@@ -72,7 +72,9 @@ const AddTodo = (props) => {
 
   return (
     <>
-      <h1 className="text-3xl font-bold my-3 text-center">TodoInput</h1>
+      <h1 className="text-3xl font-bold my-3 text-center">
+        TodoInput <i class="fa-solid fa-check"></i>
+      </h1>
       <div className="container border-solid grid border-solid border-2 p-4">
         <Form onSubmit={addTodo}>
           <InputGroup className="mb-3" onChange={(e) => change(e)}>

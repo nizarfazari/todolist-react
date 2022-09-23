@@ -3,12 +3,12 @@
     {
       "id": 1,
       "task": "Nyuci mobil",
-      "complete": true
+      "complete": false
     },
     {
       "id": 2,
       "task": "Memberi makan kucing",
-      "complete": true
+      "complete": false
     },
     {
       "id": 3,
@@ -18,7 +18,7 @@
     {
       "id": 4,
       "task": "Sarapan sereal",
-      "complete": true
+      "complete": false
     },
     {
       "id": 5,
@@ -26,28 +26,13 @@
       "complete": false
     },
     {
-      "id": 6,
-      "task": "Ngeprint tugas",
-      "complete": true
-    },
-    {
-      "id": 7,
-      "task": "Bayar tagihan bulanan",
-      "complete": true
-    },
-    {
       "id": 8,
       "task": "Berangkat kuliah",
       "complete": false
     },
     {
-      "id": 9,
-      "task": "Les bahasa Inggris",
-      "complete": true
-    },
-    {
-      "id": 10,
-      "task": "Ke rumah Sabrina",
+      "id": 4395,
+      "task": "asdas",
       "complete": false
     }
   ]

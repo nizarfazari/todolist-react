@@ -64,7 +64,7 @@ const MainTodo = () => {
   const removeAll = (a) => {
     if (a === true) {
       return data
-        .filter((a) => a.complete === false)
+        .filter((a) => a.complete === true)
         .map((i) => {
           return axios
             .delete(`${API_URL}/${i.id}`)
@@ -89,14 +89,24 @@ const MainTodo = () => {
   };
 
   const completeTodo = (id) => {
-    let updatedTodos = data.map((todo) => {
+    data.map((todo) => {
       if (todo.id === id) {
         //klick 1 true ke 2 false
         todo.complete = todo.complete = !todo.complete;
+        axios
+          .put(`${API_URL}/${id}`, todo)
+          .then((res) => {
+            getData();
+          })
+          .catch((err) => {
+            return err.message;
+          });
       }
-      return todo;
+      console.log(todo);
+      // return todo;
     });
-    setData(updatedTodos);
+    //kalo pakek state dengan cara di bawah ini
+    // setData(updatedTodos);
   };
 
   return (
@@ -134,6 +144,7 @@ const MainTodo = () => {
                 <div className={`labels border-2 flex justify-between p-3 my-4 ${i.complete ? "complete" : ""} `} key={i.id}>
                   <div className="text">{i.task}</div>
                   <div className="icons flex">
+                    {console.log(i.complete)}
                     {i.complete ? <input type="checkbox" checked className="icon checkbox" onClick={(e) => completeTodo(i.id)} /> : <input type="checkbox" className="icon checkbox" onClick={(e) => completeTodo(i.id)} />}
                     <MdEdit className="icon edit" onClick={() => navigate(`/edit-todo/${i.id}`)} />
                     <MdDelete className="icon delete" onClick={() => removeTodo(i.id)} />
