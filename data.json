@@ -23,7 +23,7 @@
     {
       "id": 5,
       "task": "Belanja harian",
-      "complete": false
+      "complete": true
     },
     {
       "id": 8,

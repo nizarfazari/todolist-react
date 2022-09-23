@@ -89,7 +89,7 @@ const MainTodo = () => {
   };
 
   const completeTodo = (id) => {
-    data.map((todo) => {
+    const updatedTodos = data.map((todo) => {
       if (todo.id === id) {
         //klick 1 true ke 2 false
         todo.complete = todo.complete = !todo.complete;
@@ -103,10 +103,10 @@ const MainTodo = () => {
           });
       }
       console.log(todo);
-      // return todo;
+      return todo;
     });
     //kalo pakek state dengan cara di bawah ini
-    // setData(updatedTodos);
+    setData(updatedTodos);
   };
 
   return (
