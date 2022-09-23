@@ -39,3 +39,8 @@ code {
   width: 20px;
   height: 20px;
 }
+
+.icon.checkbox {
+  background-color: white !important;
+  color: green !important;
+}

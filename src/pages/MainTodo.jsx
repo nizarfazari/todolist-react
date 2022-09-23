@@ -41,6 +41,7 @@ const MainTodo = () => {
         return e;
       }
     });
+    setData(a)
   };
 
   const removeTodo = (id) => {
@@ -51,10 +52,21 @@ const MainTodo = () => {
 
   const removeAll = (a) => {
     if (a === true) {
-      const hasil = data.filter((a) => a.complete === false);
-      setData(hasil);
+      return data.filter((a) => a.complete === false).map(i =>{
+        return axios.delete(`${API_URL}/${i.id}`).then(res => {
+          getData();
+        }).catch(err => {
+          console.log(err);
+        })
+      });
+      // setData(hasil);
     } else {
-      setData([]);
+       return data.map(i => {
+        return axios.delete(`${API_URL}/${i.id}`).then(res => {
+          getData();
+        })
+      })
+      // setData([]);
     }
   };
 
@@ -79,7 +91,7 @@ const MainTodo = () => {
             <InputGroup.Text id="inputGroup-sizing-default" style={{ backgroundColor: "#16A3B5" }}>
               <FaSearch className="text-xl fill-white" />
             </InputGroup.Text>
-            <Form.Control aria-label="Default" aria-describedby="inputGroup-sizing-default" value={input} />
+            <Form.Control aria-label="Default" aria-describedby="inputGroup-sizing-default" value={input} placeholder="Search Todo" />
           </InputGroup>
           <div className="d-grid">
             <Buttons nama="Search" backgroundColor="#16A3B5" />
@@ -105,8 +117,8 @@ const MainTodo = () => {
                 <div className={`labels border-2 flex justify-between p-3 my-4 ${i.complete ? "complete" : ""} `} key={i.id}>
                   <div className="text">{i.task}</div>
                   <div className="icons flex">
-                    {i.complete ? <input type="checkbox" checked className="icon" onClick={(e) => completeTodo(i.id)} /> : <input type="checkbox" className="icon" onClick={(e) => completeTodo(i.id)} />}
-                    <MdEdit className="icon edit" />
+                    {i.complete ? <input type="checkbox" checked className="icon checkbox" onClick={(e) => completeTodo(i.id)} /> : <input type="checkbox" className="icon checkbox" onClick={(e) => completeTodo(i.id)} />}
+                    <MdEdit className="icon edit" onClick={() => navigate(`/edit-todo/${i.id}`) } />
                     <MdDelete className="icon delete" onClick={() => removeTodo(i.id)} />
                   </div>
                 </div>
