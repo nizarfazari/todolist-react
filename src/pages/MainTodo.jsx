@@ -13,6 +13,15 @@ const MainTodo = () => {
   const [input, setInput] = useState("");
   const navigate = useNavigate();
 
+  //kalau pakek local storage yang nanti di masukan ke dalam state
+  // useEffect(() => {
+  //   let arr = localStorage.getItem("list");
+  //   if (arr) {
+  //     let datas = JSON.parse(arr);
+  //     setData(datas);
+  //   }
+  // }, []);
+
   useEffect(() => {
     getData();
   }, []);
@@ -41,31 +50,40 @@ const MainTodo = () => {
         return e;
       }
     });
-    setData(a)
+    setData(a);
   };
 
   const removeTodo = (id) => {
     axios.delete(`${API_URL}/${id}`).then((res) => {
       getData();
     });
+    //kalo pakek state dengan cara di bawah ini
+    // const removeArr = data.filter((todo) => todo.id !== id);
   };
 
   const removeAll = (a) => {
     if (a === true) {
-      return data.filter((a) => a.complete === false).map(i =>{
-        return axios.delete(`${API_URL}/${i.id}`).then(res => {
-          getData();
-        }).catch(err => {
-          console.log(err);
-        })
-      });
+      return data
+        .filter((a) => a.complete === false)
+        .map((i) => {
+          return axios
+            .delete(`${API_URL}/${i.id}`)
+            .then((res) => {
+              getData();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        });
+      //kalo pakek state dengan cara di bawah ini
       // setData(hasil);
     } else {
-       return data.map(i => {
-        return axios.delete(`${API_URL}/${i.id}`).then(res => {
+      return data.map((i) => {
+        return axios.delete(`${API_URL}/${i.id}`).then((res) => {
           getData();
-        })
-      })
+        });
+      });
+      //kalo pakek state dengan cara di bawah ini
       // setData([]);
     }
   };
@@ -76,7 +94,6 @@ const MainTodo = () => {
         //klick 1 true ke 2 false
         todo.complete = todo.complete = !todo.complete;
       }
-      console.log(todo.complete);
       return todo;
     });
     setData(updatedTodos);
@@ -118,7 +135,7 @@ const MainTodo = () => {
                   <div className="text">{i.task}</div>
                   <div className="icons flex">
                     {i.complete ? <input type="checkbox" checked className="icon checkbox" onClick={(e) => completeTodo(i.id)} /> : <input type="checkbox" className="icon checkbox" onClick={(e) => completeTodo(i.id)} />}
-                    <MdEdit className="icon edit" onClick={() => navigate(`/edit-todo/${i.id}`) } />
+                    <MdEdit className="icon edit" onClick={() => navigate(`/edit-todo/${i.id}`)} />
                     <MdDelete className="icon delete" onClick={() => removeTodo(i.id)} />
                   </div>
                 </div>

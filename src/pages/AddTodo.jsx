@@ -9,34 +9,59 @@ import axios from "axios";
 const AddTodo = (props) => {
   const [inputData, setInputData] = useState("");
   const navigate = useNavigate();
-  const {id} =  useParams()
+  const { id } = useParams();
+
+  // kalau pakai cara local storage yang nanti di oper ke mainTODO
+  // useEffect(() => {
+  //   localStorage.setItem("list", JSON.stringify(data));
+  // }, [data]);
+
+  // const addTodo = (e) => {
+  //   e.preventDefault();
+
+  //   if (!inputData) {
+  //   } else {
+  //     const datas = {
+  //       id: Math.floor(Math.random() * 10000),
+  //       text: inputData,
+  //       complete: false,
+  //     };
+  //     setData([...data, datas]);
+  //     setInputData("");
+  //   }
+  // };
 
   const addTodo = (e) => {
     e.preventDefault();
-    
+
     if (!inputData) {
       alert("belum measukan data");
-    }else if(id){
-      const datas= {
+    } else if (id) {
+      const datas = {
         task: inputData,
-      }
-      axios.put(`${API_URL}/${id}`, datas)
-      .then(res => {
-        navigate("/");
-      }).catch(err => {
-        return err.message
-      })
+      };
+      axios
+        .put(`${API_URL}/${id}`, datas)
+        .then((res) => {
+          navigate("/");
+        })
+        .catch((err) => {
+          return err.message;
+        });
     } else {
       const datas = {
         id: Math.floor(Math.random() * 10000),
         task: inputData,
         complete: false,
       };
-      axios.post(API_URL, datas).then((res) => {
-        navigate("/");
-      }).catch(err => {
-        return err.message
-      })
+      axios
+        .post(API_URL, datas)
+        .then((res) => {
+          navigate("/");
+        })
+        .catch((err) => {
+          return err.message;
+        });
       setInputData("");
     }
   };
